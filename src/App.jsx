@@ -1,25 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect } from "react";
+import { getAll } from "./services/tarea.service";
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const data = await getAll();
+        console.log("Lista de tareas:", data);
+      } catch (error) {
+        console.error("Error al obtener tareas:", error);
+      }
+    };
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Hola Mundo!</h1>
-      
-    </>
-  )
+    fetchTasks();
+  }, []);
+
+  return <h1>Tareas</h1>;
 }
 
-export default App
+export default App;
