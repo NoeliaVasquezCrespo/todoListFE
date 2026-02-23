@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { getAll } from "./services/tarea.service";
+import { getAll } from "./services/task.service";
+import CategoryList from "./components/CategoryList";
 
 function App() {
   useEffect(() => {
@@ -15,7 +16,11 @@ function App() {
     fetchTasks();
   }, []);
 
-  return <h1>Tareas</h1>;
+  return (
+     <div>
+      <CategoryList />
+    </div>
+  )
 }
 
 export default App;
