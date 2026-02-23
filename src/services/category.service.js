@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:8000/api/categories";
+import { API_URL } from "./index";
 
 
 export const getAllCategories = async () => {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}categories`);
     return await response.json();
 };
