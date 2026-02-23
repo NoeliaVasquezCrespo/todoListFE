@@ -1,20 +1,36 @@
 import { useEffect, useState } from "react";
-import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import { getAllCategories } from "../services/category.service";
-import "./CategoryList.css";
+import { FaEye, FaEdit, FaTrash, FaPlusCircle  } from "react-icons/fa";
+import { getAllCategories } from "../../services/category.service";
+import "../../assets/styles/List.css";
+import { useNavigate } from "react-router-dom";
+
 
 function CategoryList() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    getAllCategories()
-      .then(res => setCategories(res.categories))
-      .catch(err => console.error(err));
+    loadCategories();
   }, []);
+
+  const loadCategories = async () => {
+    try {
+      const response = await getAllCategories();
+      setCategories(response.categories);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const navigate = useNavigate();
 
   return (
     <div className="category-container">
       <h2 className="category-title">Lista de Categorías</h2>
+
+      <button
+        className="create-btn"
+        onClick={() => navigate("/categories/create")}
+      > <FaPlusCircle /> Agregar nueva categoría </button>
 
       <table className="category-table">
         <thead>

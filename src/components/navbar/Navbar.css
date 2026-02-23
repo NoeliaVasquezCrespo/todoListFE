@@ -1,4 +1,9 @@
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 97%;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,6 +11,7 @@
   background-color: #0c3a53;
   color: white;
 }
+
 
 .logo {
   font-size: 30px;
