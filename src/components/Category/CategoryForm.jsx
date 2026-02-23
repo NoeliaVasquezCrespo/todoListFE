@@ -1,0 +1,83 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { create } from "../../services/category.service";
+import "../../assets/styles/Form.css";
+
+function CategoryForm() {
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        name: "",
+        description: "",
+        color: "#000000",
+    });
+
+    const [error, setError] = useState("");
+
+    const handleChange = ({ target }) => {
+        setFormData({
+            ...formData,
+            [target.name]: target.value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.name.trim()) {
+            setError("El nombre es obligatorio");
+            return;
+        }
+
+        if (!formData.description.trim()) {
+            setError("La descripción es obligatoria");
+            return;
+        }
+
+        try {
+            await create(formData);
+            navigate("/categories");
+        } catch (err) {
+            console.error("Error:", err);
+            setError("Error al crear la categoría");
+        }
+    };
+
+    return (
+        <div className="form-wrapper">
+            <div className="form-card">
+                <h2>CREAR CATEGORÍA</h2>
+
+                <form onSubmit={handleSubmit} className="category-form">
+
+                    <div className="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Descripción</label>
+                        <input type="text" name="description" value={formData.description} onChange={handleChange} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Color</label>
+                        <input type="color" name="color" value={formData.color} onChange={handleChange} className="color-input" required />
+                    </div>
+
+                    <div className="form-buttons">
+                        <button type="button" className="btn-cancel" onClick={() => navigate("/categories")}>
+                            Cancelar
+                        </button>
+
+                        <button type="submit" className="btn-submit">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
+
+export default CategoryForm;
