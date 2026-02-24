@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaEye, FaEdit, FaTrash, FaPlusCircle  } from "react-icons/fa";
-import { getAll } from "../../services/category.service";
+import { getAll, remove } from "../../services/category.service";
 import "../../assets/styles/List.css";
 import { useNavigate } from "react-router-dom";
 
@@ -22,6 +22,16 @@ function CategoryList() {
   };
 
   const navigate = useNavigate();
+
+  const handleDelete = async (id) => {
+    try {
+      await remove(id); 
+      setCategories(categories.filter(c => c.id !== id)); 
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo eliminar la categoría");
+    }
+  };
 
   return (
     <div className="category-container">
@@ -67,7 +77,7 @@ function CategoryList() {
                     <FaEdit size={16} />
                   </button>
 
-                  <button className="action-btn btn-delete">
+                  <button className="action-btn btn-delete" onClick={() => handleDelete(id)}>
                     <FaTrash size={16} />
                   </button>
                 </div>
