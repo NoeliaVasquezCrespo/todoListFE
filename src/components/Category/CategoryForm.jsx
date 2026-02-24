@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { create } from "../../services/category.service";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { create, update, getOne } from "../../services/category.service";
 import "../../assets/styles/Form.css";
 
 function CategoryForm() {
     const navigate = useNavigate();
+    const { id } = useParams();
+
+    const isEdit = Boolean(id);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -13,6 +16,27 @@ function CategoryForm() {
     });
 
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (isEdit) {
+            loadCategory();
+        }
+    }, [id]);
+
+    const loadCategory = async () => {
+        try {
+            const data = await getOne(id);
+
+            setFormData({
+                name: data.name || "",
+                description: data.description || "",
+                color: data.color || "#000000",
+            });
+        } catch (err) {
+            console.error("Error cargando categoría:", err);
+            setError("No se pudo cargar la categoría");
+        }
+    };
 
     const handleChange = ({ target }) => {
         setFormData({
@@ -23,6 +47,7 @@ function CategoryForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
 
         if (!formData.name.trim()) {
             setError("El nombre es obligatorio");
@@ -35,21 +60,28 @@ function CategoryForm() {
         }
 
         try {
-            await create(formData);
+            if (isEdit) {
+                await update(id, formData);
+            } else {
+                await create(formData);
+            }
+
             navigate("/categories");
+
         } catch (err) {
             console.error("Error:", err);
-            setError("Error al crear la categoría");
+            setError(isEdit ? "Error al actualizar la categoría" : "Error al crear la categoría");
         }
     };
 
     return (
         <div className="form-wrapper">
             <div className="form-card">
-                <h2>CREAR CATEGORÍA</h2>
+                <h2>{isEdit ? "EDITAR CATEGORÍA" : "CREAR CATEGORÍA"}</h2>
+
+                {error && <p className="error-text">{error}</p>}
 
                 <form onSubmit={handleSubmit} className="category-form">
-
                     <div className="form-group">
                         <label>Nombre</label>
                         <input type="text" name="name" value={formData.name} onChange={handleChange} required />
@@ -71,7 +103,7 @@ function CategoryForm() {
                         </button>
 
                         <button type="submit" className="btn-submit">
-                            Guardar
+                            {isEdit ? "Actualizar" : "Guardar"}
                         </button>
                     </div>
                 </form>
