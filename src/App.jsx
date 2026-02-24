@@ -4,6 +4,7 @@ import Navbar from "./components/navbar/Navbar";
 import { getAll } from "./services/task.service";
 import CategoryList from "./components/Category/CategoryList";
 import CategoryForm from "./components/Category/CategoryForm";
+import CategoryShow from "./components/Category/CategoryShow";
 
 function App() {
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/tasks" />
         <Route path="/categories" element={<CategoryList />} />
         <Route path="/categories/create" element={<CategoryForm />} />
+        <Route path="/categories/:id" element={<CategoryShow />} />
         <Route path="/tags" />
       </Routes>
     </div>

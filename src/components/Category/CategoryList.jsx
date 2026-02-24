@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaEye, FaEdit, FaTrash, FaPlusCircle  } from "react-icons/fa";
-import { getAllCategories } from "../../services/category.service";
+import { getAll } from "../../services/category.service";
 import "../../assets/styles/List.css";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +14,7 @@ function CategoryList() {
 
   const loadCategories = async () => {
     try {
-      const response = await getAllCategories();
+      const response = await getAll();
       setCategories(response.categories);
     } catch (error) {
       console.error(error);
@@ -59,7 +59,7 @@ function CategoryList() {
 
               <td>
                 <div className="actions-container">
-                  <button className="action-btn btn-view">
+                  <button className="action-btn btn-view"  onClick={() => navigate(`/categories/${id}`)}>
                     <FaEye size={16} />
                   </button>
 
