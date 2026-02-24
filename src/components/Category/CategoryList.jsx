@@ -63,7 +63,7 @@ function CategoryList() {
                     <FaEye size={16} />
                   </button>
 
-                  <button className="action-btn btn-edit">
+                  <button className="action-btn btn-edit" onClick={() => navigate(`/categories/edit/${id}`)}>
                     <FaEdit size={16} />
                   </button>
 

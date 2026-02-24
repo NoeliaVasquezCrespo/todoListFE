@@ -1,4 +1,4 @@
-import { API_URL } from "./index";
+import { API_URL, headers } from "./index";
 
 export const getAll = async () => {
     const response = await fetch(`${API_URL}categories`);
@@ -18,16 +18,27 @@ export const getOne = async (id) => {
 export const create = async (category) => {
     const response = await fetch(`${API_URL}categories`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
+        headers: headers,
         body: JSON.stringify(category),
     });
 
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(JSON.stringify(errorData));
+    }
+
+    return await response.json();
+};
+
+export const update = async (id, data) => {
+    const response = await fetch(`${API_URL}categories/${id}`, {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al actualizar la categoría");
     }
 
     return await response.json();
