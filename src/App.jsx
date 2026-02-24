@@ -29,6 +29,7 @@ function App() {
         <Route path="/tasks" />
         <Route path="/categories" element={<CategoryList />} />
         <Route path="/categories/create" element={<CategoryForm />} />
+        <Route path="/categories/edit/:id" element={<CategoryForm />} />
         <Route path="/categories/:id" element={<CategoryShow />} />
         <Route path="/tags" />
       </Routes>
