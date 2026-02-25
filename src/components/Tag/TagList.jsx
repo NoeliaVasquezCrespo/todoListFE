@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { FaEye, FaEdit, FaTrash, FaPlusCircle  } from "react-icons/fa";
-import { getAll, remove } from "../../services/category.service";
+import { FaEye, FaEdit, FaTrash, FaPlusCircle } from "react-icons/fa";
+import { getAll, remove } from "../../services/tag.service";
 import "../../assets/styles/List.css";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-
-function CategoryList() {
-  const [categories, setCategories] = useState([]);
+function TagList() {
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    loadCategories();
+    loadtags();
   }, []);
 
-  const loadCategories = async () => {
+  const loadtags = async () => {
     try {
       const response = await getAll();
-      setCategories(response.categories);
+      setTags(response.tags);
     } catch (error) {
       console.error(error);
     }
@@ -24,23 +24,42 @@ function CategoryList() {
   const navigate = useNavigate();
 
   const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Eliminar etiqueta?",
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar"
+    });
+
+    if (!result.isConfirmed) return;
     try {
-      await remove(id); 
-      setCategories(categories.filter(c => c.id !== id)); 
+      await remove(id);
+      setTags(tags.filter(t => t.id !== id));
+      Swal.fire({
+        title: "Correcto",
+        text: "La etiqueta fue eliminada correctamente",
+        icon: "success"
+      });
     } catch (err) {
       console.error(err);
-      setError("No se pudo eliminar la categoría");
+      Swal.fire({
+        title: "Error",
+        text: err.message || "No se pudo eliminar la etiqueta",
+        icon: "error"
+      });
     }
   };
 
   return (
     <div className="container">
-      <h2 className="title">Lista de Categorías</h2>
+      <h2 className="title">Lista de Etiquetas</h2>
 
       <button
         className="create-btn"
-        onClick={() => navigate("/categories/create")}
-      > <FaPlusCircle /> Agregar nueva categoría </button>
+        onClick={() => navigate("/tags/create")}
+      > <FaPlusCircle /> Agregar nueva etiqueta </button>
 
       <table className="table">
         <thead>
@@ -54,7 +73,7 @@ function CategoryList() {
         </thead>
 
         <tbody>
-          {categories.map(({ id, name, description, color }) => (
+          {tags.map(({ id, name, description, color }) => (
             <tr key={id}>
               <td>{id}</td>
               <td>{name}</td>
@@ -69,11 +88,11 @@ function CategoryList() {
 
               <td>
                 <div className="actions-container">
-                  <button className="action-btn btn-view"  onClick={() => navigate(`/categories/${id}`)}>
+                  <button className="action-btn btn-view" onClick={() => navigate(`/tags/${id}`)}>
                     <FaEye size={16} />
                   </button>
 
-                  <button className="action-btn btn-edit" onClick={() => navigate(`/categories/edit/${id}`)}>
+                  <button className="action-btn btn-edit" onClick={() => navigate(`/tags/edit/${id}`)}>
                     <FaEdit size={16} />
                   </button>
 
@@ -90,4 +109,4 @@ function CategoryList() {
   );
 }
 
-export default CategoryList;
+export default TagList;

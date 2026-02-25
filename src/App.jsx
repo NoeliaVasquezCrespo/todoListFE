@@ -6,6 +6,10 @@ import CategoryList from "./components/Category/CategoryList";
 import CategoryForm from "./components/Category/CategoryForm";
 import CategoryShow from "./components/Category/CategoryShow";
 
+import TagList from "./components/Tag/TagList";
+import TagForm from "./components/Tag/TagForm";
+import TagShow from "./components/Tag/TagShow";
+
 function App() {
   useEffect(() => {
     const fetchTasks = async () => {
@@ -31,7 +35,11 @@ function App() {
         <Route path="/categories/create" element={<CategoryForm />} />
         <Route path="/categories/edit/:id" element={<CategoryForm />} />
         <Route path="/categories/:id" element={<CategoryShow />} />
-        <Route path="/tags" />
+
+        <Route path="/tags" element={<TagList />} />
+        <Route path="/tags/create" element={<TagForm />} />
+        <Route path="/tags/edit/:id" element={<TagForm />} />
+        <Route path="/tags/:id" element={<TagShow />} />
       </Routes>
     </div>
   );
