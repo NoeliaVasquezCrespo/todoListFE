@@ -75,22 +75,15 @@ function TaskList() {
 
               <td>
                 <div className="actions-container">
-                  <button
-                    className="action-btn btn-view"
-                    onClick={() => navigate(`/tasks/${task.id}`)}
-                  >
+                  <button className="action-btn btn-view" onClick={() => navigate(`/tasks/${task.id}`)}>
                     <FaEye size={16} />
                   </button>
 
-                  <button
-                    className="action-btn btn-edit"
-                  >
+                  <button className="action-btn btn-edit"  onClick={() => navigate(`/tasks/edit/${task.id}`)}>
                     <FaEdit size={16} />
                   </button>
 
-                  <button
-                    className="action-btn btn-delete"
-                  >
+                  <button className="action-btn btn-delete" >
                     <FaTrash size={16} />
                   </button>
                 </div>

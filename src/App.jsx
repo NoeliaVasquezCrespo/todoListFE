@@ -5,6 +5,7 @@ import Navbar from "./components/navbar/Navbar";
 import TaskList from "./components/Task/TaskList";
 import TaskForm from "./components/Task/TaskForm";
 import TaskShow from "./components/Task/TaskShow";
+import TaskFormEdit from "./components/Task/TaskFormEdit";
 
 import CategoryList from "./components/Category/CategoryList";
 import CategoryForm from "./components/Category/CategoryForm";
@@ -24,6 +25,7 @@ function App() {
 
         <Route path="/tasks" element={<TaskList />} />
         <Route path="/tasks/create" element={<TaskForm />} />
+        <Route path="/tasks/edit/:id" element={<TaskFormEdit />} />
         <Route path="/tasks/:id" element={<TaskShow />} />
 
         <Route path="/categories" element={<CategoryList />} />
