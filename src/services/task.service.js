@@ -1,23 +1,33 @@
-const API_URL = "http://localhost:8000/api/tasks";
-
+import { API_URL, headers } from "./index";
 
 export const getAll = async () => {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}tasks`);
     return await response.json();
 };
 
-export const show = async (id) => {
-
+export const getOne = async (id) => {
+   
 };
 
 export const create = async (task) => {
+    const response = await fetch(`${API_URL}tasks`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(task),
+    });
 
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData));
+    }
+
+    return await response.json();
 };
 
 export const update = async (id, task) => {
-
+    
 };
 
 export const remove = async (id) => {
-
+   
 };
