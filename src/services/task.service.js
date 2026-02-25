@@ -6,7 +6,13 @@ export const getAll = async () => {
 };
 
 export const getOne = async (id) => {
-   
+    const response = await fetch(`${API_URL}tasks/${id}`);
+
+    if (!response.ok) {
+        throw new Error("Error al obtener la tarea");
+    }
+
+    return await response.json();
 };
 
 export const create = async (task) => {
@@ -25,9 +31,9 @@ export const create = async (task) => {
 };
 
 export const update = async (id, task) => {
-    
+
 };
 
 export const remove = async (id) => {
-   
+
 };

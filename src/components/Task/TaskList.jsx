@@ -4,6 +4,7 @@ import { getAll } from "../../services/task.service";
 import "../../assets/styles/List.css";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/Task.css";
+import { FcOk, FcHighPriority} from "react-icons/fc";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -35,6 +36,7 @@ function TaskList() {
       <table className="table">
         <thead>
           <tr>
+            <th>Estado</th>
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
@@ -47,6 +49,12 @@ function TaskList() {
         <tbody>
           {tasks.map((task) => (
             <tr key={task.id}>
+              <td>
+                 <span
+                        className={`status-icon ${task.status ? "completed" : "pending" }`}>
+                        {task.status ? <FcOk />: <FcHighPriority />}
+                    </span>
+              </td>
               <td>{task.id}</td>
               <td>{task.title}</td>
               <td>{task.description}</td>
