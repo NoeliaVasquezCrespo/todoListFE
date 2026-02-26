@@ -31,7 +31,17 @@ export const create = async (task) => {
 };
 
 export const update = async (id, task) => {
+    const response = await fetch(`${API_URL}tasks/${id}`, {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify(task),
+    });
 
+    if (!response.ok) {
+        throw new Error("Error al actualizar la tarea");
+    }
+
+    return await response.json();
 };
 
 export const remove = async (id) => {
