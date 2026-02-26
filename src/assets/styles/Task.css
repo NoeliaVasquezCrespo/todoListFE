@@ -7,3 +7,89 @@
   display: inline-block;
   font-weight: 500;
 }
+
+.show-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.show-card {
+  width: 100%;
+  max-width: 800px;
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.show-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.show-description {
+  margin-bottom: 20px;
+  color: #374151;
+}
+
+.show-section {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #000000;
+}
+
+.category-badge {
+  padding: 6px 12px;
+  display: inline-block;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-badge {
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.status-badge.completed {
+  background-color: #28c260ef;
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #eb3939ee;
+  color: white;
+}
+
+.show-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+
+.status-icon {
+  font-size: 20px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
