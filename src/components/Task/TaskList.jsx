@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaEye, FaEdit, FaTrash, FaPlusCircle } from "react-icons/fa";
-import { getAll } from "../../services/task.service";
+import { getAll, remove } from "../../services/task.service";
 import "../../assets/styles/List.css";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/Task.css";
-import { FcOk, FcHighPriority} from "react-icons/fc";
+import { FcOk, FcHighPriority } from "react-icons/fc";
+import Swal from "sweetalert2";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -19,6 +20,37 @@ function TaskList() {
       setTasks(response.tasks);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Eliminar tarea?",
+      text: "Esta tarea será eliminada",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar"
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await remove(id);
+        setTasks(tasks.filter(task => task.id !== id));
+
+        Swal.fire({
+          title: "Correcto",
+          text: "La tarea fue eliminada correctamente.",
+          icon: "success"
+        });
+
+      } catch (err) {
+        Swal.fire({
+          title: "Error",
+          text: err.message || "No se pudo eliminar la tarea",
+          icon: "error"
+        });
+      }
     }
   };
 
@@ -50,10 +82,10 @@ function TaskList() {
           {tasks.map((task) => (
             <tr key={task.id}>
               <td>
-                 <span
-                        className={`status-icon ${task.status ? "completed" : "pending" }`}>
-                        {task.status ? <FcOk />: <FcHighPriority />}
-                    </span>
+                <span
+                  className={`status-icon ${task.status ? "completed" : "pending" }`}>
+                  {task.status ? <FcOk />: <FcHighPriority />}
+                </span>
               </td>
               <td>{task.id}</td>
               <td>{task.title}</td>
@@ -83,7 +115,7 @@ function TaskList() {
                     <FaEdit size={16} />
                   </button>
 
-                  <button className="action-btn btn-delete" >
+                  <button className="action-btn btn-delete" onClick={() => handleDelete(task.id)}>
                     <FaTrash size={16} />
                   </button>
                 </div>
