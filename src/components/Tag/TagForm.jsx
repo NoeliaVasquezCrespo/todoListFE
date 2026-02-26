@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { create, update, getOne } from "../../services/category.service";
+import { create, update, getOne } from "../../services/tag.service";
 import "../../assets/styles/Form.css";
 
-function CategoryForm() {
+function TagForm() {
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -19,11 +19,11 @@ function CategoryForm() {
 
     useEffect(() => {
         if (isEdit) {
-            loadCategory();
+            loadTag();
         }
     }, [id]);
 
-    const loadCategory = async () => {
+    const loadTag = async () => {
         try {
             const data = await getOne(id);
 
@@ -33,8 +33,8 @@ function CategoryForm() {
                 color: data.color || "#000000",
             });
         } catch (err) {
-            console.error("Error cargando categoría:", err);
-            setError("No se pudo cargar la categoría");
+            console.error("Error cargando etiqueta:", err);
+            setError("No se pudo cargar la etiqueta");
         }
     };
 
@@ -66,18 +66,18 @@ function CategoryForm() {
                 await create(formData);
             }
 
-            navigate("/categories");
+            navigate("/tags");
 
         } catch (err) {
             console.error("Error:", err);
-            setError(isEdit ? "Error al actualizar la categoría" : "Error al crear la categoría");
+            setError(isEdit ? "Error al actualizar la etiqueta" : "Error al crear la etiqueta");
         }
     };
 
     return (
         <div className="form-wrapper">
             <div className="form-card">
-                <h2>{isEdit ? "EDITAR CATEGORÍA" : "CREAR CATEGORÍA"}</h2>
+                <h2>{isEdit ? "EDITAR ETIQUETA" : "CREAR ETIQUETA"}</h2>
 
                 {error && <p className="error-text">{error}</p>}
 
@@ -98,7 +98,7 @@ function CategoryForm() {
                     </div>
 
                     <div className="form-buttons">
-                        <button type="button" className="btn-cancel" onClick={() => navigate("/categories")}>
+                        <button type="button" className="btn-cancel" onClick={() => navigate("/tags")}>
                             Cancelar
                         </button>
 
@@ -112,4 +112,4 @@ function CategoryForm() {
     );
 }
 
-export default CategoryForm;
+export default TagForm;
