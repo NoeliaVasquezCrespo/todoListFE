@@ -1,7 +1,7 @@
 import { fetchWithAuth } from "./index";
 
-export const getAll = async () => {
-    return fetchWithAuth("tags");
+export const getAll = async (page = 1) => {
+    return fetchWithAuth(`tags?page=${page}`);
 };
 
 export const getOne = async (id) => {

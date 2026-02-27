@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { create, update, getOne } from "../../services/tag.service";
 import "../../assets/styles/Form.css";
+import Swal from 'sweetalert2'
 
 function TagForm() {
     const navigate = useNavigate();
@@ -62,15 +63,30 @@ function TagForm() {
         try {
             if (isEdit) {
                 await update(id, formData);
+                Swal.fire({
+                    title: "Correcto",
+                    text: "Etiqueta modificada correctamente",
+                    icon: "success"
+                });
             } else {
                 await create(formData);
+                Swal.fire({
+                    title: "Correcto",
+                    text: "Etiqueta creada correctamente",
+                    icon: "success"
+                });
             }
 
             navigate("/tags");
 
         } catch (err) {
-            console.error("Error:", err);
-            setError(isEdit ? "Error al actualizar la etiqueta" : "Error al crear la etiqueta");
+            setError(err.message || "Error inesperado");
+            
+            Swal.fire({
+                title: "Error",
+                text: err.message,
+                icon: "error"
+            });
         }
     };
 

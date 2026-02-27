@@ -4,6 +4,7 @@ import { getAll as getAllCategories } from "../../services/category.service";
 import { getAll as getAllTags } from "../../services/tag.service";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/Form.css";
+import Swal from "sweetalert2";
 
 function TaskForm() {
     const navigate = useNavigate();
@@ -21,10 +22,15 @@ function TaskForm() {
     }, []);
 
     const loadData = async () => {
-        const catRes = await getAllCategories();
-        const tagRes = await getAllTags();
-        setCategories(catRes.categories);
-        setTags(tagRes.tags);
+        try {
+            const catRes = await getAllCategories();
+            const tagRes = await getAllTags();
+
+            setCategories(catRes.data || []);
+            setTags(tagRes.data || []);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleTagChange = (tagId) => {
@@ -47,6 +53,11 @@ function TaskForm() {
         };
 
         await create(data);
+        Swal.fire({
+            title: "Correcto",
+            text: "Tarea creada correctamente",
+             icon: "success"
+        });
         navigate("/tasks");
     };
 
