@@ -99,3 +99,34 @@
 .create-btn:hover {
   background-color: #059669;
 }
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  color: #1b1b1b;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  cursor: pointer;
+  border: none;
+  background-color: #1973c7;
+  color: white;
+  border-radius: 4px;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.message {
+  text-align: center;
+  color: black;
+  margin-top: 2rem;
+  font-size: 18px;
+  font-weight: 500;
+}

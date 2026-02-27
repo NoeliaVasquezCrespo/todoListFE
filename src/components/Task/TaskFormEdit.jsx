@@ -4,6 +4,7 @@ import { getOne, update } from "../../services/task.service";
 import { getAll as getAllCategories } from "../../services/category.service";
 import { getAll as getAllTags } from "../../services/tag.service";
 import "../../assets/styles/Form.css";
+import Swal from "sweetalert2";
 
 function TaskFormEdit() {
   const { id } = useParams();
@@ -35,10 +36,10 @@ function TaskFormEdit() {
         });
 
         const catData = await getAllCategories();
-        setCategories(catData.categories || catData);
+        setCategories(catData.data || []);
 
         const tagData = await getAllTags();
-        setTags(tagData.tags || tagData);
+        setTags(tagData.data || []);
 
       } catch (err) {
         console.error(err);
@@ -52,10 +53,8 @@ function TaskFormEdit() {
 
     if (type === "checkbox") {
       setTask({ ...task, [name]: checked });
-    } else if (type === "select-multiple") {
-      const selected = Array.from(e.target.selectedOptions)
-        .map(option => parseInt(option.value));
-      setTask({ ...task, tags: selected });
+    } else if (name === "category_id") {
+      setTask({ ...task, category_id: parseInt(value) });
     } else {
       setTask({ ...task, [name]: value });
     }
@@ -75,14 +74,22 @@ function TaskFormEdit() {
     e.preventDefault();
     try {
       await update(id, task);
+      Swal.fire({
+        title: "Correcto",
+        text: "Tarea modificada correctamente",
+        icon: "success"
+      });
       navigate("/tasks");
     } catch (err) {
-      console.error(err);
-      alert("Error updating task");
+      setError(err.message || "Error inesperado");
+      
+      Swal.fire({
+        title: "Error",
+        text: err.message,
+        icon: "error"
+      });
     }
   };
-
-  if (!task) return <p>Error al mostrar los datos</p>;
 
   return (
     <div className="form-wrapper">

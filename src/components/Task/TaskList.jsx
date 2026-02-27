@@ -9,15 +9,18 @@ import Swal from "sweetalert2";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
 
   useEffect(() => {
     loadTasks();
-  }, []);
+  }, [page]);
 
   const loadTasks = async () => {
     try {
-      const response = await getAll();
-      setTasks(response.tasks);
+      const response = await getAll(page);
+      setTasks(response.data);
+      setLastPage(response.last_page);
     } catch (error) {
       console.error(error);
     }
@@ -124,6 +127,17 @@ function TaskList() {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        <button disabled={page === 1}  onClick={() => setPage(prev => prev - 1)}>
+          Anterior
+        </button>
+
+        <span>Página {page} de {lastPage}</span>
+
+        <button disabled={page === lastPage} onClick={() => setPage(prev => prev + 1)}>
+          Siguiente
+        </button>
+      </div>
     </div>
   );
 }

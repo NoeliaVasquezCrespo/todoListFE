@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { create, update, getOne } from "../../services/category.service";
 import "../../assets/styles/Form.css";
+import Swal from 'sweetalert2'
 
 function CategoryForm() {
     const navigate = useNavigate();
@@ -62,15 +63,30 @@ function CategoryForm() {
         try {
             if (isEdit) {
                 await update(id, formData);
+                Swal.fire({
+                    title: "Correcto",
+                    text: "Categoría modificada correctamente",
+                    icon: "success"
+                });
             } else {
                 await create(formData);
+                Swal.fire({
+                    title: "Correcto",
+                    text: "Categoría creada correctamente",
+                    icon: "success"
+                });
             }
 
             navigate("/categories");
 
         } catch (err) {
-            console.error("Error:", err);
-            setError(isEdit ? "Error al actualizar la categoría" : "Error al crear la categoría");
+            setError(err.message || "Error inesperado");
+
+            Swal.fire({
+                title: "Error",
+                text: err.message,
+                icon: "error"
+            });
         }
     };
 
