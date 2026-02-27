@@ -25,7 +25,6 @@ function Login() {
 
         try {
             const response = await login(form);
-            console.log("Login:", response);
             localStorage.setItem("token", response.accessToken);
             localStorage.setItem("user", JSON.stringify(response.user));
 
