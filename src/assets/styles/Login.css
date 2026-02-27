@@ -1,0 +1,9 @@
+.form-img {
+    width: 50%;
+    height: 180px;
+    margin: 15px auto 30px auto;
+    background-image: url("https://imgs.search.brave.com/bzmNaEv8_Y2-GwoTBF5Ix7PJqy2GdLX7ybwFayu7SfE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9wZXJz/b24tY29uZmlybWlu/Zy10YXNrcy1jb21w/dXRlci1jaGVja2xp/c3QtcHJvZHVjdGl2/aXR5LXZlY3Rvci1k/ZXNpZ24tZ2VuZXJh/dGl2ZS1haS1jbGVh/ci1pbGx1c3RyYXRp/b24tc2hvd2luZy1y/ZXZpZXdpbmctMzk4/MDI2NzU0LmpwZw");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

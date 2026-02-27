@@ -15,13 +15,15 @@ import TagList from "./components/Tag/TagList";
 import TagForm from "./components/Tag/TagForm";
 import TagShow from "./components/Tag/TagShow";
 
+import Login from "./components/Login/Login";
+
 function App() {
   return (
     <div>
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Navigate to="/categories" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
 
         <Route path="/tasks" element={<TaskList />} />
         <Route path="/tasks/create" element={<TaskForm />} />
@@ -37,6 +39,8 @@ function App() {
         <Route path="/tags/create" element={<TagForm />} />
         <Route path="/tags/edit/:id" element={<TagForm />} />
         <Route path="/tags/:id" element={<TagShow />} />
+
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
