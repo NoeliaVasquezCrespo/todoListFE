@@ -1,76 +1,30 @@
-import { API_URL } from "./index";
-
-const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    return {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
-    };
-};
+import { fetchWithAuth } from "./index";
 
 export const getAll = async () => {
-    const response = await fetch(`${API_URL}categories`, {
-        headers: getAuthHeaders()
-    });
-
-    if (!response.ok) {
-        throw new Error("Error al obtener las categorías");
-    }
-
-    return response.json();
+    return fetchWithAuth("categories");
 };
 
 export const getOne = async (id) => {
-    const response = await fetch(`${API_URL}categories/${id}`, {
-        headers: getAuthHeaders()
-    });
-
-    if (!response.ok) {
-        throw new Error("Error al obtener la categoría");
-    }
-
-    return response.json();
+    return fetchWithAuth(`categories/${id}`);
 };
 
-export const create = async (category) => {
-    const response = await fetch(`${API_URL}categories`, {
+export const create = async (data) => {
+    return fetchWithAuth("categories", {
         method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(category),
+        body: JSON.stringify(data)
     });
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData));
-    }
-
-    return response.json();
 };
 
 export const update = async (id, data) => {
-    const response = await fetch(`${API_URL}categories/${id}`, {
+    return fetchWithAuth(`categories/${id}`, {
         method: "PUT",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
     });
-
-    if (!response.ok) {
-        throw new Error("Error al actualizar la categoría");
-    }
-
-    return response.json();
 };
 
 export const remove = async (id) => {
-    const response = await fetch(`${API_URL}categories/${id}`, {
-        method: "DELETE",
-        headers: getAuthHeaders()
+    return fetchWithAuth(`categories/${id}`, {
+        method: "DELETE"
     });
-
-    if (!response.ok) {
-        throw new Error("Error al eliminar la categoría");
-    }
-
-    return true;
 };
+
