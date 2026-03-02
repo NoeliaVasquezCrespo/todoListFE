@@ -5,6 +5,7 @@ import { getAll as getAllCategories } from "../../services/category.service";
 import { getAll as getAllTags } from "../../services/tag.service";
 import "../../assets/styles/Form.css";
 import Swal from "sweetalert2";
+import Select from "react-select";
 
 function TaskFormEdit() {
   const { id } = useParams();
@@ -60,14 +61,41 @@ function TaskFormEdit() {
     }
   };
 
-  const handleTagChange = (tagId) => {
-    const alreadySelected = task.tags.includes(tagId);
-    const updatedTags = alreadySelected ? task.tags.filter(id => id !== tagId) : [...task.tags, tagId];
+  const tagOptions = tags.map(tag => ({
+    value: tag.id,
+    label: tag.name,
+    color: tag.color
+  }));
 
-    setTask({
-      ...task,
-      tags: updatedTags
-    });
+  const customStyles = {
+    multiValue: (styles, { data }) => ({
+      ...styles,
+      backgroundColor: data.color + "20",
+      borderRadius: 20
+    }),
+    multiValueLabel: (styles, { data }) => ({
+      ...styles,
+      color: data.color,
+      fontWeight: 500
+    }),
+    multiValueRemove: (styles, { data }) => ({
+      ...styles,
+      color: data.color,
+      ':hover': {
+        backgroundColor: data.color,
+        color: "white"
+      }
+    }),
+    option: (styles, { data, isFocused, isSelected }) => ({
+      ...styles,
+      backgroundColor: isSelected
+        ? data.color
+        : isFocused
+          ? data.color + "10"
+          : "white",
+      color: isSelected ? "white" : data.color,
+      cursor: "pointer"
+    })
   };
 
   const handleSubmit = async (e) => {
@@ -82,7 +110,7 @@ function TaskFormEdit() {
       navigate("/tasks");
     } catch (err) {
       setError(err.message || "Error inesperado");
-      
+
       Swal.fire({
         title: "Error",
         text: err.message,
@@ -120,22 +148,21 @@ function TaskFormEdit() {
           <div className="form-group">
             <label>Etiquetas</label>
 
-            <details className="multiselect">
-              <summary className="multiselect-btn"> Etiquetas </summary>
-
-              <div className="multiselect-dropdown">
-                {tags.map(tag => (
-                  <label key={tag.id} className="multiselect-option">
-                    <input type="checkbox" checked={task.tags.includes(tag.id)} onChange={() => handleTagChange(tag.id)} />
-                    <span
-                      className="tag-label"
-                      style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
-                      {tag.name}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </details>
+            <Select options={tagOptions}
+              isMulti
+              placeholder="Seleccionar etiquetas..."
+              closeMenuOnSelect={false}
+              styles={customStyles}
+              value={tagOptions.filter(option =>
+                task.tags.includes(option.value)
+              )}
+              onChange={(selected) =>
+                setTask({
+                  ...task,
+                  tags: selected ? selected.map(tag => tag.value) : []
+                })
+              }
+            />
           </div>
           <div className="form-group checkbox-group">
             <label>

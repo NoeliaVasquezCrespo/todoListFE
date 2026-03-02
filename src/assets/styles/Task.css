@@ -93,3 +93,12 @@
   text-align: center;
   justify-content: center;
 }
+
+.tag-more {
+  background-color: #e5e7eb;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}

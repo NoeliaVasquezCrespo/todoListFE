@@ -5,6 +5,7 @@ import { getAll as getAllTags } from "../../services/tag.service";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/Form.css";
 import Swal from "sweetalert2";
+import Select from "react-select";
 
 function TaskForm() {
     const navigate = useNavigate();
@@ -33,12 +34,41 @@ function TaskForm() {
         }
     };
 
-    const handleTagChange = (tagId) => {
-        if (selectedTags.includes(tagId)) {
-            setSelectedTags(selectedTags.filter(id => id !== tagId));
-        } else {
-            setSelectedTags([...selectedTags, tagId]);
-        }
+    const tagOptions = tags.map(tag => ({
+        value: tag.id,
+        label: tag.name,
+        color: tag.color
+    }));
+
+    const customStyles = {
+        multiValue: (styles, { data }) => ({
+            ...styles,
+            backgroundColor: data.color + "20", 
+            borderRadius: 20
+        }),
+        multiValueLabel: (styles, { data }) => ({
+            ...styles,
+            color: data.color,
+            fontWeight: 500
+        }),
+        multiValueRemove: (styles, { data }) => ({
+            ...styles,
+            color: data.color,
+            ':hover': {
+                backgroundColor: data.color,
+                color: "white"
+            }
+        }),
+        option: (styles, { data, isFocused, isSelected }) => ({
+            ...styles,
+            backgroundColor: isSelected
+                ? data.color
+                : isFocused
+                ? data.color + "10"
+                : "white",
+            color: isSelected ? "white" : data.color,
+            cursor: "pointer"
+        })
     };
 
     const handleSubmit = async (e) => {
@@ -48,17 +78,17 @@ function TaskForm() {
             title,
             description,
             category_id: categoryId,
-            tags: selectedTags,
+            tags: selectedTags.map(tag => tag.value),
             status: false
         };
 
-        await create(data);
-        Swal.fire({
-            title: "Correcto",
-            text: "Tarea creada correctamente",
-             icon: "success"
-        });
-        navigate("/tasks");
+            await create(data);
+            Swal.fire({
+                title: "Correcto",
+                text: "Tarea creada correctamente",
+                icon: "success"
+            });
+            navigate("/tasks");
     };
 
     return (
@@ -92,27 +122,14 @@ function TaskForm() {
                     <div className="form-group">
                         <label>Etiquetas</label>
 
-                        <details className="multiselect">
-                            <summary className="multiselect-btn">
-                                Seleccionar etiquetas
-                            </summary>
-
-                            <div className="multiselect-dropdown">
-                                {tags.map(tag => (
-                                    <label key={tag.id} className="multiselect-option">
-                                        <input type="checkbox" checked={selectedTags.includes(tag.id)} onChange={() => handleTagChange(tag.id)} />
-                                        <span className="tag-label"
-                                            style={{
-                                                backgroundColor: `${tag.color}20`,
-                                                color: tag.color
-                                            }}
-                                        >
-                                            {tag.name}
-                                        </span>
-                                    </label>
-                                ))}
-                            </div>
-                        </details>
+                        <Select options={tagOptions}
+                            isMulti
+                            value={selectedTags}
+                            onChange={setSelectedTags}
+                            placeholder="Seleccionar etiquetas..."
+                            closeMenuOnSelect={false}
+                            styles={customStyles}
+                        />
                     </div>
 
                     <div className="form-buttons">
