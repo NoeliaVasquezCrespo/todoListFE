@@ -97,7 +97,7 @@ function TaskList() {
                 {task.category?.name || "Sin categoría"}
               </td>
               <td>
-                {task.tags?.map(tag => (
+                {task.tags?.slice(0, 2).map(tag => (
                   <span
                     key={tag.id}
                     className="tag"
@@ -106,6 +106,9 @@ function TaskList() {
                     {tag.name}
                   </span>
                 ))}
+                {task.tags?.length > 2 && (
+                  <span className="tag-more">+{task.tags.length - 2}</span>
+                )}
               </td>
 
               <td>
