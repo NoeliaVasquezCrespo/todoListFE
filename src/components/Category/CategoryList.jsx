@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 function CategoryList() {
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   useEffect(() => {
     loadCategories();
@@ -18,12 +18,16 @@ function CategoryList() {
     try {
       const response = await getAll(page);
       setCategories(response.data);
-      setLastPage(response.last_page);
+      if (response.data.length < response.limit) {
+        setHasNextPage(false);
+      } else {
+        setHasNextPage(true);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   const navigate = useNavigate();
 
   const handleDelete = async (id) => {
@@ -113,14 +117,14 @@ function CategoryList() {
           ))}
         </tbody>
       </table>
-     <div className="pagination">
+      <div className="pagination">
         <button disabled={page === 1}  onClick={() => setPage(prev => prev - 1)}>
           Anterior
         </button>
 
-        <span>Página {page} de {lastPage}</span>
+        <span>Página {page} </span>
 
-        <button disabled={page === lastPage} onClick={() => setPage(prev => prev + 1)}>
+        <button disabled={!hasNextPage} onClick={() => setPage(prev => prev + 1)}>
           Siguiente
         </button>
       </div>

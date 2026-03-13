@@ -8,17 +8,21 @@ import Swal from "sweetalert2";
 function TagList() {
   const [tags, setTags] = useState([]);
   const [page, setPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   useEffect(() => {
     loadtags();
-  }, []);
+  }, [page]);
 
   const loadtags = async () => {
     try {
       const response = await getAll(page);
       setTags(response.data);
-      setLastPage(response.last_page);
+      if (response.data.length < response.limit) {
+        setHasNextPage(false);
+      } else {
+        setHasNextPage(true);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -113,9 +117,9 @@ function TagList() {
           Anterior
         </button>
 
-        <span>Página {page} de {lastPage}</span>
+        <span>Página {page} </span>
 
-        <button disabled={page === lastPage} onClick={() => setPage(prev => prev + 1)}>
+        <button disabled={!hasNextPage} onClick={() => setPage(prev => prev + 1)}>
           Siguiente
         </button>
       </div>

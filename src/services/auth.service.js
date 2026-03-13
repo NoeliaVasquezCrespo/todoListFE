@@ -1,7 +1,7 @@
 import { API_URL } from "./index";
 
 export const login = async (credentials) => {
-    const response = await fetch(`${API_URL}login`, {
+    const response = await fetch(`${API_URL}users/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

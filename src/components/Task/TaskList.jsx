@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [page, setPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   useEffect(() => {
     loadTasks();
@@ -20,7 +20,11 @@ function TaskList() {
     try {
       const response = await getAll(page);
       setTasks(response.data);
-      setLastPage(response.last_page);
+      if (response.data.length < response.limit) {
+        setHasNextPage(false);
+      } else {
+        setHasNextPage(true);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -135,9 +139,9 @@ function TaskList() {
           Anterior
         </button>
 
-        <span>Página {page} de {lastPage}</span>
+        <span>Página {page} </span>
 
-        <button disabled={page === lastPage} onClick={() => setPage(prev => prev + 1)}>
+        <button disabled={!hasNextPage} onClick={() => setPage(prev => prev + 1)}>
           Siguiente
         </button>
       </div>

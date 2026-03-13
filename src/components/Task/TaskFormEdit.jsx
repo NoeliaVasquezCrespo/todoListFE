@@ -27,11 +27,11 @@ function TaskFormEdit() {
       try {
         const response = await getOne(id);
         const taskData = response.data;
-
+        
         setTask({
           title: taskData.title || "",
           description: taskData.description || "",
-          category_id: taskData.category_id || "",
+          category_id: taskData.category_id ? String(taskData.category_id) : "",
           tags: taskData.tags ? taskData.tags.map(tag => tag.id) : [],
           status: taskData.status ?? false
         });
@@ -55,7 +55,7 @@ function TaskFormEdit() {
     if (type === "checkbox") {
       setTask({ ...task, [name]: checked });
     } else if (name === "category_id") {
-      setTask({ ...task, category_id: parseInt(value) });
+      setTask({ ...task, category_id: value });
     } else {
       setTask({ ...task, [name]: value });
     }
