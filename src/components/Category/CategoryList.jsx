@@ -16,7 +16,7 @@ function CategoryList() {
 
   const loadCategories = async () => {
     try {
-      const response = await getAll(page);
+      const response = await getAll({ page });
       setCategories(response.data);
       if (response.data.length < response.limit) {
         setHasNextPage(false);
@@ -27,7 +27,7 @@ function CategoryList() {
       console.error(error);
     }
   };
-  
+
   const navigate = useNavigate();
 
   const handleDelete = async (id) => {
