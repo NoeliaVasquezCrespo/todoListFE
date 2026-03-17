@@ -12,7 +12,7 @@ function TaskForm() {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [categoryId, setCategoryId] = useState("");
+    const [selectedCategory, setSelectedCategory ] = useState(null);
     const [selectedTags, setSelectedTags] = useState([]);
 
     const [categories, setCategories] = useState([]);
@@ -24,8 +24,8 @@ function TaskForm() {
 
     const loadData = async () => {
         try {
-            const catRes = await getAllCategories();
-            const tagRes = await getAllTags();
+            const catRes = await getAllCategories({ withoutPagination: true });
+            const tagRes = await getAllTags({ withoutPagination: true });
 
             setCategories(catRes.data || []);
             setTags(tagRes.data || []);
@@ -33,6 +33,12 @@ function TaskForm() {
             console.error(error);
         }
     };
+
+    const categoryOptions = categories.map(cat => ({
+        value: cat.id,
+        label: cat.name,
+        color: cat.color
+    }));
 
     const tagOptions = tags.map(tag => ({
         value: tag.id,
@@ -43,7 +49,7 @@ function TaskForm() {
     const customStyles = {
         multiValue: (styles, { data }) => ({
             ...styles,
-            backgroundColor: data.color + "20", 
+            backgroundColor: data.color + "20",
             borderRadius: 20
         }),
         multiValueLabel: (styles, { data }) => ({
@@ -64,8 +70,8 @@ function TaskForm() {
             backgroundColor: isSelected
                 ? data.color
                 : isFocused
-                ? data.color + "10"
-                : "white",
+                    ? data.color + "10"
+                    : "white",
             color: isSelected ? "white" : data.color,
             cursor: "pointer"
         })
@@ -77,18 +83,18 @@ function TaskForm() {
         const data = {
             title,
             description,
-            category_id: categoryId,
+            category_id: selectedCategory?.value,
             tags: selectedTags.map(tag => tag.value),
             status: false
         };
 
-            await create(data);
-            Swal.fire({
-                title: "Correcto",
-                text: "Tarea creada correctamente",
-                icon: "success"
-            });
-            navigate("/tasks");
+        await create(data);
+        Swal.fire({
+            title: "Correcto",
+            text: "Tarea creada correctamente",
+            icon: "success"
+        });
+        navigate("/tasks");
     };
 
     return (
@@ -109,14 +115,14 @@ function TaskForm() {
 
                     <div className="form-group">
                         <label>Categoría</label>
-                        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required className="form-select" >
-                            <option value="">Seleccione una categoría</option>
-                            {categories.map(cat => (
-                                <option key={cat.id} value={cat.id}>
-                                    {cat.name}
-                                </option>
-                            ))}
-                        </select>
+                        <Select
+                            options={categoryOptions}
+                            value={selectedCategory}
+                            onChange={setSelectedCategory}
+                            placeholder="Selecciona una categoría..."
+                            isClearable
+                            styles={customStyles}
+                        />
                     </div>
 
                     <div className="form-group">

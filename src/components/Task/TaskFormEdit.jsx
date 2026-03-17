@@ -27,19 +27,19 @@ function TaskFormEdit() {
       try {
         const response = await getOne(id);
         const taskData = response.data;
-        
+
         setTask({
           title: taskData.title || "",
           description: taskData.description || "",
-          category_id: taskData.category_id ? String(taskData.category_id) : "",
+          category_id: taskData.category_id ?? "",
           tags: taskData.tags ? taskData.tags.map(tag => tag.id) : [],
           status: taskData.status ?? false
         });
 
-        const catData = await getAllCategories();
+        const catData = await getAllCategories({ withoutPagination: true });
         setCategories(catData.data || []);
 
-        const tagData = await getAllTags();
+        const tagData = await getAllTags({ withoutPagination: true });
         setTags(tagData.data || []);
 
       } catch (err) {
@@ -54,12 +54,18 @@ function TaskFormEdit() {
 
     if (type === "checkbox") {
       setTask({ ...task, [name]: checked });
-    } else if (name === "category_id") {
-      setTask({ ...task, category_id: value });
     } else {
       setTask({ ...task, [name]: value });
     }
   };
+
+  const categoryOptions = categories.map(cat => ({
+    value: cat.id,
+    label: cat.name,
+    color: cat.color
+  }));
+
+  const selectedCategory = categoryOptions.find(option => option.value === task.category_id) || null;
 
   const tagOptions = tags.map(tag => ({
     value: tag.id,
@@ -137,12 +143,19 @@ function TaskFormEdit() {
 
           <div className="form-group">
             <label>Categoría</label>
-            <select name="category_id" value={task.category_id} onChange={handleChange} required className="form-select">
-              <option value="">Seleccione una categoría</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}> {cat.name}</option>
-              ))}
-            </select>
+            <Select
+              options={categoryOptions}
+              value={selectedCategory}
+              placeholder="Selecciona una categoría"
+              isClearable
+              styles={customStyles}
+              onChange={(selected) =>
+                setTask({
+                  ...task,
+                  category_id: selected ? selected.value : ""
+                })
+              }
+            />
           </div>
 
           <div className="form-group">

@@ -16,7 +16,7 @@ function TagList() {
 
   const loadtags = async () => {
     try {
-      const response = await getAll(page);
+      const response = await getAll({ page });
       setTags(response.data);
       if (response.data.length < response.limit) {
         setHasNextPage(false);
